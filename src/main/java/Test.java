@@ -15,6 +15,7 @@ public class Test {
     SparkConf conf = new SparkConf().setMaster("local").setAppName("Work Count App")
         .set("spark.hadoop.dfs.client.use.datanode.hostname", "true");
     JavaSparkContext sc = new JavaSparkContext(conf);
+
     JavaRDD<String> input = sc.textFile("hdfs://hadoop:9000/audit.log");
     JavaRDD<String> words = input.flatMap(
         (FlatMapFunction<String, String>) s -> Arrays.asList(s.split(" ")));
@@ -22,6 +23,7 @@ public class Test {
         (PairFunction<String, String, Integer>) s -> new Tuple2(s, 1));
     JavaPairRDD<String, Integer> reducedCounts = counts.reduceByKey(
         (Function2<Integer, Integer, Integer>) (x, y) -> x + y);
+
     reducedCounts.saveAsTextFile("output");
   }
 }
