@@ -1,3 +1,5 @@
+package io.teivah.spark;
+
 import java.util.Arrays;
 
 import org.apache.spark.SparkConf;
@@ -10,13 +12,13 @@ import org.apache.spark.api.java.function.PairFunction;
 
 import scala.Tuple2;
 
-public class Test {
+public class SparkHdfsHelloWorld {
   public static void main(String[] args) {
     SparkConf conf = new SparkConf().setMaster("local").setAppName("Work Count App")
         .set("spark.hadoop.dfs.client.use.datanode.hostname", "true");
     JavaSparkContext sc = new JavaSparkContext(conf);
 
-    JavaRDD<String> input = sc.textFile("hdfs://hadoop:9000/audit.log");
+    JavaRDD<String> input = sc.textFile("hdfs://hadoop:9000/FILENAME");
     JavaRDD<String> words = input.flatMap(
         (FlatMapFunction<String, String>) s -> Arrays.asList(s.split(" ")));
     JavaPairRDD<String, Integer> counts = words.mapToPair(
