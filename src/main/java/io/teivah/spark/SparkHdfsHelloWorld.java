@@ -20,7 +20,7 @@ public class SparkHdfsHelloWorld {
 
     JavaRDD<String> input = sc.textFile("hdfs://hadoop:9000/FILENAME");
     JavaRDD<String> words = input.flatMap(
-        (FlatMapFunction<String, String>) s -> Arrays.asList(s.split(" ")));
+        (FlatMapFunction<String, String>) s -> Arrays.asList(s.split(" ")).iterator());
     JavaPairRDD<String, Integer> counts = words.mapToPair(
         (PairFunction<String, String, Integer>) s -> new Tuple2(s, 1));
     JavaPairRDD<String, Integer> reducedCounts = counts.reduceByKey(
